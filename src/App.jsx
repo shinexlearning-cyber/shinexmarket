@@ -1241,7 +1241,7 @@ function SellPage({ go }) {
     if (categories.length && !form.categoryId) {
       setForm((f) => ({ ...f, categoryId: categories[0].id }));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, [categories]);
 
   if (!user) {

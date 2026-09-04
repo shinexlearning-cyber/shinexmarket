@@ -577,6 +577,38 @@ const CATEGORY_TILE_COLORS = [
   { bg: "#EDE9FE", fg: "#7C3AED" }, // violet
 ];
 
+const CATEGORY_IMAGES = {
+  Books:
+    "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?auto=format&fit=crop&w=300&q=85",
+
+  Electronics:
+    "https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&w=300&q=85",
+
+  Fashion:
+    "https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=300&q=85",
+
+  "Food and Dining":
+    "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=300&q=85",
+
+  "Health and Beauty":
+    "https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=300&q=85",
+
+  "Home and Garden":
+    "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=300&q=85",
+
+  Other:
+    "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&w=300&q=85",
+
+  Services:
+    "https://images.unsplash.com/photo-1521791055366-0d553872125f?auto=format&fit=crop&w=300&q=85",
+
+  Sports:
+    "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=300&q=85",
+
+  Vehicles:
+    "https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=300&q=85",
+};
+
 function HomePage({ go, search, favoriteProductIds, toggleFavorite }) {
   const { categories } = useCategories();
   const [products, setProducts] = useState([]);
@@ -626,12 +658,29 @@ function HomePage({ go, search, favoriteProductIds, toggleFavorite }) {
                   onClick={() => setActiveCategory(active ? "all" : c.id)}
                   className="flex flex-col items-center gap-1.5 group"
                 >
-                  <div
-                    className="w-12 h-12 rounded-2xl flex items-center justify-center text-lg transition-transform group-active:scale-95"
-                    style={{ backgroundColor: palette.bg, color: palette.fg, boxShadow: active ? `0 0 0 2px ${COLORS.primary}` : "none" }}
-                  >
-                    {c.icon || c.name.slice(0, 1)}
-                  </div>
+                 <div
+  className="w-12 h-12 rounded-2xl overflow-hidden flex items-center justify-center transition-transform group-active:scale-95"
+  style={{
+    backgroundColor: palette.bg,
+    boxShadow: active ? `0 0 0 2px ${COLORS.primary}` : "none",
+  }}
+>
+  {CATEGORY_IMAGES[c.name] ? (
+    <img
+      src={CATEGORY_IMAGES[c.name]}
+      alt={c.name}
+      className="w-full h-full object-cover"
+      loading="lazy"
+    />
+  ) : (
+    <span
+      className="text-lg font-bold"
+      style={{ color: palette.fg }}
+    >
+      {c.name.slice(0, 1)}
+    </span>
+  )}
+</div>
                   <span className="text-[11px] font-medium text-gray-600 text-center leading-tight truncate w-full">{c.name}</span>
                 </button>
               );

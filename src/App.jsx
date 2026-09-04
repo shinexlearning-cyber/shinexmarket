@@ -648,13 +648,17 @@ function HomePage({ go, search, favoriteProductIds, toggleFavorite }) {
         <div>
           <p className="text-white font-bold text-lg leading-tight">Buy. Sell. Discover.</p>
           <p className="text-white/80 text-xs mt-1 max-w-[220px]">Everything you need in one place.</p>
-          <a
-            href="#product-grid"
+          <button
+            type="button"
+            onClick={() => {
+              go("home");
+              document.getElementById("product-grid")?.scrollIntoView({ behavior: "smooth", block: "start" });
+            }}
             className="inline-block mt-3 bg-white text-sm font-semibold px-4 py-1.5 rounded-lg"
             style={{ color: COLORS.primary }}
           >
             Shop now
-          </a>
+          </button>
         </div>
         <ShoppingBag size={64} className="text-white/15 shrink-0" />
       </div>
@@ -1237,7 +1241,7 @@ function SellPage({ go }) {
     if (categories.length && !form.categoryId) {
       setForm((f) => ({ ...f, categoryId: categories[0].id }));
     }
-    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categories]);
 
   if (!user) {
@@ -1724,13 +1728,14 @@ function ContactPage() {
 
   const submit = async (e) => {
     e.preventDefault();
-    if (!form.name || !form.email || !form.subject || form.message.trim().length < 10) {
+    if (!form.name || !form.email || form.message.trim().length < 10) {
       toast.push("Please fill in every field (message needs at least 10 characters).", "error");
       return;
     }
     setLoading(true);
     try {
-      await api("/contact", { method: "POST", body: form, auth: false });
+      const subject = form.subject.trim() || "General Inquiry";
+      await api("/contact", { method: "POST", body: { ...form, subject }, auth: false });
       toast.push("Message sent — we'll get back to you soon.", "success");
       setForm({ name: "", email: "", subject: "", message: "" });
     } catch (e) {

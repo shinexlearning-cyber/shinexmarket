@@ -1,9 +1,9 @@
 services:
   - type: web
-    name: shinex-frontend
+    name: shinexmarket
     env: static
     buildCommand: npm install && npm run build
-    staticPublishPath: ./dist/public
+    staticPublishPath: dist/public
     routes:
       - type: rewrite
         source: /*

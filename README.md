@@ -5,21 +5,21 @@ Mobile-first SHINEX marketplace frontend for buyers and sellers. The project use
 ## Run locally
 
 ```bash
-pnpm install
-pnpm --filter @workspace/shinex-user-frontend dev
+npm install
+npm --filter shinex-user-frontend dev
 ```
 
 The scaffold requires `PORT` and `BASE_PATH` when starting Vite. The workspace runtime supplies those values. For a standalone run:
 
 ```bash
-PORT=5173 BASE_PATH=/ pnpm dev
+PORT=5173 BASE_PATH=/ npm dev
 ```
 
 ## Build and preview
 
 ```bash
-PORT=5173 BASE_PATH=/ pnpm build
-PORT=5173 BASE_PATH=/ pnpm preview
+PORT=5173 BASE_PATH=/ npm build
+PORT=5173 BASE_PATH=/ npm preview
 ```
 
 ## Configuration

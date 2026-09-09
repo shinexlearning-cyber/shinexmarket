@@ -23,7 +23,8 @@ export type Pagination = { page: number; limit: number; total: number; totalPage
 export type ProductPage = { items: Product[]; pagination?: Pagination };
 export type ApiFailure = Error & { status?: number };
 
-const baseUrl = (import.meta.env.VITE_SHINEX_API_URL || (import.meta.env.DEV ? '/__shinex_api' : 'https://shinex-marketplace.onrender.com/api')).replace(/\/$/, '');
+const configuredApiUrl = import.meta.env.VITE_SHINEX_API_URL?.trim();
+const baseUrl = (configuredApiUrl || (import.meta.env.DEV ? '/__shinex_api' : 'https://shinex-marketplace.onrender.com/api')).replace(/\/$/, '');
 const tokenKey = 'shinex_auth_token';
 
 export const getStoredToken = () => {
@@ -41,13 +42,36 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   if (!(init.body instanceof FormData)) headers.set('Content-Type', 'application/json');
   const token = getStoredToken();
   if (token) headers.set('Authorization', `Bearer ${token}`);
-  const response = await fetch(`${baseUrl}${path}`, { ...init, headers, credentials: 'omit' });
-  const json = await response.json().catch(() => null) as { success?: boolean; message?: string; data?: T } | null;
+  let response: Response;
+  try {
+    response = await fetch(`${baseUrl}${path}`, { ...init, headers, credentials: 'include' });
+  } catch (error) {
+    const message = error instanceof Error && error.message
+      ? `Unable to reach the SHINEX server. ${error.message}`
+      : 'Unable to reach the SHINEX server. Please check your internet connection and try again.';
+    throw Object.assign(new Error(message), { status: undefined }) as ApiFailure;
+  }
+
+  const contentType = response.headers.get('content-type') || '';
+  const json = contentType.includes('application/json')
+    ? await response.json().catch(() => null) as { success?: boolean; message?: string; data?: T } | null
+    : null;
+
   if (!response.ok || json?.success === false) {
-    const failure = new Error(json?.message || `Request failed (${response.status})`) as ApiFailure;
+    const fallback = response.status === 401
+      ? 'Invalid email or password.'
+      : response.status === 403
+        ? 'You are not allowed to perform this action.'
+        : response.status === 404
+          ? 'The requested SHINEX resource was not found.'
+          : response.status >= 500
+            ? 'SHINEX server error. Please try again later.'
+            : `Request failed (${response.status} ${response.statusText || 'Error'}).`;
+    const failure = new Error(json?.message || fallback) as ApiFailure;
     failure.status = response.status;
     throw failure;
   }
+
   return (json && 'data' in json ? json.data : json) as T;
 }
 const json = (body: unknown): RequestInit => ({ method: 'POST', body: JSON.stringify(body) });

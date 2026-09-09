@@ -34,7 +34,7 @@ The API client sends `credentials: include` and attaches the backend-issued Bear
 
 - `src/lib/shinex-api.ts` is a small typed fetch client using the exact routes documented by the supplied backend.
 - `src/App.tsx` contains the mobile-first shell, route states and product/seller/auth flows.
-- Version 1 intentionally exposes no cart, checkout, order or purchase flow. Customers discover products and contact sellers directly through WhatsApp; the existing backend remains unchanged so future e-commerce features can be reintroduced cleanly.
+- Version 1.0.0 intentionally exposes no cart, checkout, order or purchase flow. Customers discover products and contact sellers directly through WhatsApp; the existing backend remains unchanged so future e-commerce features can be reintroduced cleanly.
 - Product creation uses the documented multipart fields and preserves the backend’s pending-review state.
 - PWA assets live in `public/`; registration can be added by the host shell without changing API behavior.
 

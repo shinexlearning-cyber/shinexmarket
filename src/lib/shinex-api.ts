@@ -41,7 +41,7 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   if (!(init.body instanceof FormData)) headers.set('Content-Type', 'application/json');
   const token = getStoredToken();
   if (token) headers.set('Authorization', `Bearer ${token}`);
-  const response = await fetch(`${baseUrl}${path}`, { ...init, headers, credentials: 'include' });
+  const response = await fetch(`${baseUrl}${path}`, { ...init, headers, credentials: 'omit' });
   const json = await response.json().catch(() => null) as { success?: boolean; message?: string; data?: T } | null;
   if (!response.ok || json?.success === false) {
     const failure = new Error(json?.message || `Request failed (${response.status})`) as ApiFailure;

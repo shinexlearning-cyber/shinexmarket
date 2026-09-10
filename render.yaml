@@ -1,9 +1,12 @@
 services:
   - type: web
     name: shinexmarket
-    env: static
+    runtime: static
     buildCommand: npm install && npm run build
-    staticPublishPath: ./dist/public
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_SHINEX_API_URL
+        value: https://shinex-marketplace.onrender.com/api
     routes:
       - type: rewrite
         source: /*

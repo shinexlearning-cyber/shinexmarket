@@ -1,0 +1,2 @@
+import {useEffect,useState} from 'react';
+export function useTheme(){const [theme,setTheme]=useState(()=>localStorage.getItem('shinex-theme')||'system');useEffect(()=>{localStorage.setItem('shinex-theme',theme);const dark=theme==='dark'||(theme==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.dataset.theme=dark?'dark':'light'},[theme]);return [theme,setTheme]}

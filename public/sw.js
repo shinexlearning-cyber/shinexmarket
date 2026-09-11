@@ -14,7 +14,7 @@
  */
 
 const CACHE_NAME = "shinex-shell-v1";
-const APP_SHELL = ["/", "/index.html", "/manifest.json", "/icons/icon.svg"];
+const APP_SHELL = ["/", "/index.html", "/manifest.json", "/icons/icon-192.png", "/icons/icon-512.png"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -70,8 +70,8 @@ self.addEventListener("push", (event) => {
   event.waitUntil(
     self.registration.showNotification(payload.title || "SHINEX", {
       body: payload.body || "",
-      icon: "/icons/icon.svg",
-      badge: "/icons/icon.svg",
+      icon: "/icons/icon-192.png", "/icons/icon-512.png",
+      badge: "/icons/icon-192.png", "/icons/icon-512.png",
       data: payload.data || {},
     })
   );
